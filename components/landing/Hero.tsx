@@ -39,7 +39,7 @@ export default function Hero() {
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-yellow-400/15 border border-yellow-400/30 text-yellow-400 text-sm font-semibold px-4 py-2 rounded-full">
               <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
-              Romans 12:2 — Impact Team
+              Romans 12:2 Impact Team
             </div>
 
             {/* Headline */}
@@ -52,7 +52,7 @@ export default function Hero() {
             {/* Tagline */}
             <p className="text-lg sm:text-xl text-blue-100/80 max-w-lg mx-auto lg:mx-0 leading-relaxed">
               Igniting revival, birthing purpose, and unleashing kingdom
-              impact—one young life at a time.
+              impact one young life at a time.
             </p>
 
             {/* Theme Tag */}
@@ -61,7 +61,7 @@ export default function Hero() {
               <span className="text-yellow-400 font-semibold not-italic">
                 "God, Glorified in Me"
               </span>{" "}
-              — Galatians 1:24
+              Galatians 1:24
             </div>
 
             {/* Stats */}
@@ -135,7 +135,7 @@ export default function Hero() {
                   <p className="text-blue-100/70 text-sm leading-relaxed">
                     Renewed Minds International
                     <br />
-                    A.K.A Impact Team
+                    Also known as Impact Team
                   </p>
                 </div>
 
@@ -145,7 +145,7 @@ export default function Hero() {
                     href="tel:+2348102672966"
                     className="flex items-center gap-2 text-blue-100/70 hover:text-yellow-400 text-xs transition-colors justify-center"
                   >
-                    📞 +234-810-267-2966
+                    📞 +234 810 267 2966
                   </a>
                   <a
                     href="mailto:feedbackrmi39@gmail.com"

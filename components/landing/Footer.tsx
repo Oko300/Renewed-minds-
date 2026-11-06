@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Link from "next/link";
 import { Mail, Phone, MapPin, Heart } from "lucide-react";
 
 const quickLinks = [
@@ -31,14 +30,14 @@ export default function Footer() {
           Ready to Join the Impact?
         </h2>
         <p className="text-[#0F2557]/80 text-lg mb-6 max-w-xl mx-auto">
-          Together, we are Renewed Minds International — and God shall be
+          Together we are Renewed Minds International, and God shall be
           glorified in us!
         </p>
         <a
           href="mailto:feedbackrmi39@gmail.com"
           className="inline-block bg-[#0F2557] hover:bg-[#0A1A42] text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
         >
-          Get in Touch →
+          Get in Touch
         </a>
       </div>
 
@@ -66,11 +65,11 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-blue-200/60 text-sm leading-relaxed mb-5">
-              A.K.A Impact Team. Igniting revival, birthing purpose, and
-              unleashing kingdom impact — one young life at a time.
+              Also known as Impact Team. We exist to ignite revival, birth
+              purpose, and release kingdom impact in young lives.
             </p>
             <div className="text-sm font-medium text-yellow-400 italic">
-              "God, Glorified in Me" — Gal. 1:24
+              "God, Glorified in Me" Galatians 1:24
             </div>
           </div>
 
@@ -86,7 +85,7 @@ export default function Footer() {
                     href={link.href}
                     className="text-blue-200/60 hover:text-yellow-400 text-sm transition-colors duration-200"
                   >
-                    → {link.label}
+                    {link.label}
                   </a>
                 </li>
               ))}
@@ -108,14 +107,6 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-            <div className="mt-6 pt-5 border-t border-white/10">
-              <Link
-                href="/admin"
-                className="text-xs text-blue-300/50 hover:text-yellow-400 transition-colors"
-              >
-                Admin Dashboard →
-              </Link>
-            </div>
           </div>
 
           {/* Contact */}
@@ -150,7 +141,7 @@ export default function Footer() {
                     Phone
                   </p>
                   <p className="text-sm text-blue-200/70 group-hover:text-yellow-400 transition-colors">
-                    +234-810-267-2966
+                    +234 810 267 2966
                   </p>
                 </div>
               </a>

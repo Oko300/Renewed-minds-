@@ -71,12 +71,6 @@ export default function Header() {
                 {link.label}
               </button>
             ))}
-            <Link
-              href="/admin"
-              className="ml-4 bg-yellow-400 hover:bg-yellow-500 text-[#0F2557] font-semibold px-4 py-2 rounded-lg text-sm transition-all duration-200 shadow-md hover:shadow-lg"
-            >
-              Admin
-            </Link>
           </nav>
 
           {/* Mobile menu button */}
@@ -103,13 +97,6 @@ export default function Header() {
                 {link.label}
               </button>
             ))}
-            <Link
-              href="/admin"
-              className="block w-full text-center bg-yellow-400 hover:bg-yellow-500 text-[#0F2557] font-semibold px-4 py-3 rounded-lg text-sm transition-all mt-2"
-              onClick={() => setIsOpen(false)}
-            >
-              Admin Dashboard
-            </Link>
           </div>
         </div>
       )}

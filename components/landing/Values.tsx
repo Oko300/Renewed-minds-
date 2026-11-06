@@ -12,7 +12,7 @@ const coreValues = [
   {
     icon: Flame,
     title: "Passion for Souls",
-    desc: "We live to make Jesus known. Soul-winning is our heartbeat.",
+    desc: "We live to make Jesus known. Soul winning is our heartbeat.",
     bg: "bg-red-50",
     iconColor: "text-red-500",
   },
@@ -61,22 +61,22 @@ const coreValues = [
 ];
 
 const teamTraits = [
-  "Kingdom-Oriented",
-  "Purpose/Vision-Driven",
-  "Impact-Driven",
+  "Kingdom Oriented",
+  "Purpose Driven",
+  "Impact Driven",
   "Believes in No Impossibility",
   "Unstoppable",
-  "Loyal & Committed",
-  "Bound by Love & Unity",
-  "Prayer & Fasting Committed",
-  "Word-Based",
-  "Spirit-Filled",
-  "Values & Respects One Another",
+  "Loyal and Committed",
+  "Bound by Love and Unity",
+  "Committed to Prayer and Fasting",
+  "Word Based",
+  "Spirit Filled",
+  "Values and Respects One Another",
   "Committed to Growth",
-  "Knowledge-Seeking",
-  "Global & Eternal-Thinking",
-  "Real & Authentic",
-  "Purpose-Maximizing",
+  "Knowledge Seeking",
+  "Global and Eternal Thinking",
+  "Real and Authentic",
+  "Purpose Maximizing",
 ];
 
 export default function Values() {
@@ -92,7 +92,7 @@ export default function Values() {
             Our Core <span className="text-yellow-500">Values</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            These are not just principles — they are the DNA of who we are as a team.
+            These are not just principles. They are the DNA of who we are as a team.
           </p>
         </div>
 

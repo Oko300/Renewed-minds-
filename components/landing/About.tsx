@@ -4,17 +4,17 @@ const channels = [
   {
     icon: BookOpen,
     title: "Preaching & Teaching",
-    desc: "The Word of God goes forth with clarity and power — Matt. 5:1-2, Acts 5:42",
+    desc: "The Word of God goes forth with clarity and power. Matt 5:1-2, Acts 5:42",
   },
   {
     icon: Flame,
     title: "Evangelistic Outreaches",
-    desc: "Taking the Gospel to schools, communities, and the lost — Mk. 16:25, Jn. 20:21",
+    desc: "Taking the Gospel to schools, communities, and the lost. Mark 16:15, John 20:21",
   },
   {
     icon: Globe,
     title: "Ministry of the Holy Spirit",
-    desc: "Signs, wonders, and divine manifestations accompany the Word — Mk. 16:20, Acts 5:12",
+    desc: "Signs, wonders, and divine manifestations accompany the Word. Mark 16:20, Acts 5:12",
   },
   {
     icon: Users,
@@ -24,12 +24,12 @@ const channels = [
   {
     icon: Target,
     title: "Empowerment Programs",
-    desc: "Leadership Confluence · Youths on Fire Night · Everyday Revival Prayer (8–9pm)",
+    desc: "Leadership Confluence, Youths on Fire Night, Everyday Revival Prayer (8 to 9pm)",
   },
   {
     icon: Eye,
     title: "Collaborations & Partnerships",
-    desc: "Building bridges with churches, institutions, and kingdom-minded organisations.",
+    desc: "Building bridges with churches, institutions, and kingdom minded organisations.",
   },
 ];
 
@@ -48,7 +48,7 @@ export default function About() {
             <span className="text-yellow-500">International</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            A Kingdom organization with a God-given mandate to build, inspire,
+            A Kingdom organization with a God given mandate to build, inspire,
             and positively influence young minds to know Jesus and impact their
             world for good.
           </p>
@@ -94,10 +94,10 @@ export default function About() {
               </p>
               <div className="space-y-3">
                 <div className="bg-white/20 rounded-xl px-5 py-3 font-semibold text-lg">
-                  🎯 Teenagers — 13 to 19 years
+                  Teenagers (13 to 19 years)
                 </div>
                 <div className="bg-white/20 rounded-xl px-5 py-3 font-semibold text-lg">
-                  🚀 Young Adults — 18 to 25 years
+                  Young Adults (18 to 25 years)
                 </div>
               </div>
             </div>
