@@ -1,0 +1,35 @@
+{
+  "spotify": [
+    {
+      "id": "1",
+      "title": "Renewed Minds Podcast – Episode 1",
+      "description": "An inspiring conversation about faith, purpose, and kingdom impact for young people.",
+      "url": "https://open.spotify.com/show/",
+      "embedUrl": ""
+    }
+  ],
+  "resources": [
+    {
+      "id": "1",
+      "title": "Team Vision & Values Orientation Document",
+      "description": "A comprehensive guide to the vision, values, and culture of Renewed Minds International.",
+      "filename": "team-vision-values.pdf",
+      "uploadedAt": "2025-02-10"
+    },
+    {
+      "id": "2",
+      "title": "Why We Do What We Do",
+      "description": "The foundational document explaining the heart and purpose behind the Leaders of Impact Team.",
+      "filename": "why-we-do-what-we-do.pdf",
+      "uploadedAt": "2025-02-10"
+    }
+  ],
+  "team": {
+    "coordinator": {
+      "name": "Jeremiah E. Chukwuike",
+      "title": "Coordinator",
+      "bio": "A passionate kingdom-builder and youth advocate committed to building, inspiring, and positively influencing young minds to know Jesus and impact their world for good. Based at Federal University Wukari.",
+      "photo": "/logo/founder.jpeg"
+    }
+  }
+}
