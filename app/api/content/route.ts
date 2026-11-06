@@ -7,11 +7,11 @@ export async function GET() {
       supabase
         .from("resources")
         .select("*")
-        .order("created_at", { ascending: false }),
+        .order("uploaded_at", { ascending: false }),
       supabase
         .from("spotify_links")
         .select("*")
-        .order("created_at", { ascending: false }),
+        .order("id", { ascending: false }),
       supabase
         .from("team_info")
         .select("*")
@@ -19,12 +19,17 @@ export async function GET() {
         .single(),
     ]);
 
+    if (resourcesRes.error) console.error("resources error:", resourcesRes.error);
+    if (spotifyRes.error) console.error("spotify error:", spotifyRes.error);
+    if (teamRes.error) console.error("team error:", teamRes.error);
+
     return NextResponse.json({
       resources: resourcesRes.data ?? [],
       spotify: spotifyRes.data ?? [],
       team: teamRes.data ?? null,
     });
-  } catch {
+  } catch (err) {
+    console.error("content API error:", err);
     return NextResponse.json({ resources: [], spotify: [], team: null });
   }
 }
