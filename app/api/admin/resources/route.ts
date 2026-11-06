@@ -1,26 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkAuthFromRequest } from "@/lib/auth";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin, BUCKETS } from "@/lib/supabase";
 
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2);
-}
-
-// GET — list resources
+// GET — list all resources
 export async function GET(req: NextRequest) {
   if (!(await checkAuthFromRequest(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("resources")
     .select("*")
-    .order("uploaded_at", { ascending: false });
+    .order("created_at", { ascending: false });
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
 }
 
-// POST — upload PDF to Supabase Storage + save record
+// POST — upload new PDF to Supabase Storage + save record
 export async function POST(req: NextRequest) {
   if (!(await checkAuthFromRequest(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -29,62 +25,70 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    const title = (formData.get("title") as string)?.trim();
-    const description = (formData.get("description") as string)?.trim() || "";
+    const title = formData.get("title") as string;
+    const description = (formData.get("description") as string) || "";
 
-    if (!file) return NextResponse.json({ error: "No file provided" }, { status: 400 });
-    if (!title) return NextResponse.json({ error: "Title is required" }, { status: 400 });
-    if (!file.name.toLowerCase().endsWith(".pdf")) {
-      return NextResponse.json({ error: "Only PDF files are allowed" }, { status: 400 });
+    if (!file || !title) {
+      return NextResponse.json(
+        { error: "File and title are required" },
+        { status: 400 }
+      );
     }
 
-    const id = genId();
-    const safeFilename = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
-    const storagePath = `${id}-${safeFilename}`;
+    if (!file.name.toLowerCase().endsWith(".pdf")) {
+      return NextResponse.json(
+        { error: "Only PDF files are allowed" },
+        { status: 400 }
+      );
+    }
+
+    // Build a safe filename
+    const timestamp = Date.now();
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
+    const storagePath = `${timestamp}-${safeName}`;
 
     // Upload to Supabase Storage
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const { error: uploadErr } = await supabase.storage
-      .from("rmi-resources")
-      .upload(storagePath, buffer, {
+    const fileBuffer = await file.arrayBuffer();
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from(BUCKETS.RESOURCES)
+      .upload(storagePath, fileBuffer, {
         contentType: "application/pdf",
         upsert: false,
       });
 
-    if (uploadErr) {
-      console.error("Storage upload error:", uploadErr);
-      return NextResponse.json({ error: `Storage error: ${uploadErr.message}` }, { status: 500 });
+    if (uploadError) {
+      console.error("Storage upload error:", uploadError);
+      return NextResponse.json(
+        { error: `Storage upload failed: ${uploadError.message}` },
+        { status: 500 }
+      );
     }
 
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from("rmi-resources")
+    // Get the public URL
+    const { data: urlData } = supabaseAdmin.storage
+      .from(BUCKETS.RESOURCES)
       .getPublicUrl(storagePath);
 
-    // Insert into DB
-    const { data: record, error: dbErr } = await supabase
+    // Save record to DB
+    const { data: record, error: dbError } = await supabaseAdmin
       .from("resources")
       .insert({
-        id,
         title,
         description,
-        filename: file.name,
+        filename: storagePath,
         file_url: urlData.publicUrl,
-        storage_path: storagePath,
-        uploaded_at: new Date().toISOString(),
+        uploaded_at: new Date().toISOString().split("T")[0],
       })
       .select()
       .single();
 
-    if (dbErr) {
-      // Cleanup storage if DB insert fails
-      await supabase.storage.from("rmi-resources").remove([storagePath]);
-      return NextResponse.json({ error: dbErr.message }, { status: 500 });
+    if (dbError) {
+      return NextResponse.json({ error: dbError.message }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, resource: record });
   } catch (err) {
-    console.error("Upload handler error:", err);
+    console.error("Upload error:", err);
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 }
@@ -98,20 +102,27 @@ export async function DELETE(req: NextRequest) {
   try {
     const { id } = await req.json();
 
-    // Fetch the record first to get storage_path
-    const { data: record } = await supabase
+    // Get the record first to get the filename
+    const { data: record } = await supabaseAdmin
       .from("resources")
-      .select("storage_path")
+      .select("filename")
       .eq("id", id)
       .single();
 
-    if (record?.storage_path) {
-      await supabase.storage.from("rmi-resources").remove([record.storage_path]);
+    if (record?.filename) {
+      // Delete from storage
+      await supabaseAdmin.storage
+        .from(BUCKETS.RESOURCES)
+        .remove([record.filename]);
     }
 
-    const { error } = await supabase.from("resources").delete().eq("id", id);
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    // Delete from DB
+    const { error } = await supabaseAdmin
+      .from("resources")
+      .delete()
+      .eq("id", id);
 
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Delete failed" }, { status: 500 });

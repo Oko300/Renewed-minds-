@@ -8,8 +8,8 @@ interface Resource {
   title: string;
   description: string;
   filename: string;
-  fileUrl: string;        // Supabase Storage public URL
-  uploadedAt: string;
+  file_url: string;
+  uploaded_at: string;
 }
 
 interface SpotifyItem {
@@ -17,7 +17,7 @@ interface SpotifyItem {
   title: string;
   description: string;
   url: string;
-  embedUrl: string;
+  embed_url: string;
 }
 
 interface ContentData {
@@ -38,7 +38,7 @@ export default function Resources() {
 
   return (
     <>
-      {/* ── PDF Resources ────────────────────────────────── */}
+      {/* ── PDF Resources ── */}
       <section id="resources" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
@@ -49,8 +49,8 @@ export default function Resources() {
               Download <span className="text-yellow-500">Resources</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Access our orientation documents, vision guides, and kingdom
-              materials — free for every member and partner.
+              Access our orientation documents, vision guides, and kingdom materials —
+              free for every member and partner.
             </p>
           </div>
 
@@ -74,32 +74,39 @@ export default function Resources() {
                   <div className="p-6">
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#0F2557] transition-colors duration-300">
-                        <FileText size={22} className="text-[#0F2557] group-hover:text-yellow-400 transition-colors duration-300" />
+                        <FileText
+                          size={22}
+                          className="text-[#0F2557] group-hover:text-yellow-400 transition-colors duration-300"
+                        />
                       </div>
                       <div>
-                        <h3 className="font-heading font-bold text-[#0F2557] mb-1 leading-tight">{res.title}</h3>
+                        <h3 className="font-heading font-bold text-[#0F2557] mb-1 leading-tight">
+                          {res.title}
+                        </h3>
                         <p className="text-xs text-gray-400">
-                          {new Date(res.uploadedAt).toLocaleDateString("en-NG", {
-                            day: "numeric", month: "short", year: "numeric",
+                          {new Date(res.uploaded_at).toLocaleDateString("en-NG", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
                           })}
                         </p>
                       </div>
                     </div>
-                    <p className="text-gray-500 text-sm leading-relaxed mb-5">{res.description}</p>
-                    {res.fileUrl ? (
-                      <a
-                        href={res.fileUrl}
-                        download={res.filename}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 w-full bg-[#0F2557] hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl text-sm transition-all shadow-sm hover:shadow-md"
-                      >
-                        <Download size={16} />
-                        Download PDF
-                      </a>
-                    ) : (
-                      <div className="text-center text-gray-400 text-xs py-3">File unavailable</div>
+                    {res.description && (
+                      <p className="text-gray-500 text-sm leading-relaxed mb-5">
+                        {res.description}
+                      </p>
                     )}
+                    <a
+                      href={res.file_url}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full bg-[#0F2557] hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl text-sm transition-all duration-200 shadow-sm hover:shadow-md"
+                    >
+                      <Download size={16} />
+                      Download PDF
+                    </a>
                   </div>
                 </div>
               ))}
@@ -108,7 +115,7 @@ export default function Resources() {
         </div>
       </section>
 
-      {/* ── Spotify Streams ──────────────────────────────── */}
+      {/* ── Spotify ── */}
       <section id="spotify" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
@@ -144,8 +151,12 @@ export default function Resources() {
                       <Music size={28} className="text-white" />
                     </div>
                     <div className="flex-1">
-                      <h3 className="font-heading font-bold text-[#0F2557] text-lg mb-1">{item.title}</h3>
-                      <p className="text-gray-500 text-sm">{item.description}</p>
+                      <h3 className="font-heading font-bold text-[#0F2557] text-lg mb-1">
+                        {item.title}
+                      </h3>
+                      {item.description && (
+                        <p className="text-gray-500 text-sm">{item.description}</p>
+                      )}
                     </div>
                     {item.url && (
                       <a
@@ -159,10 +170,10 @@ export default function Resources() {
                       </a>
                     )}
                   </div>
-                  {item.embedUrl && (
+                  {item.embed_url && (
                     <div className="mt-5">
                       <iframe
-                        src={item.embedUrl}
+                        src={item.embed_url}
                         width="100%"
                         height="152"
                         frameBorder="0"

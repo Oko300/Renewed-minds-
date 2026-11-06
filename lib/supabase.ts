@@ -1,49 +1,27 @@
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-// Server-side: use service role key for full access (bypasses RLS)
-// Falls back to anon key if service role not set yet
-const serverKey =
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Public client — for browser-safe reads (anon key)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Admin client — server-side only, uses service role key (bypasses RLS)
+// Falls back to anon key if service role key not set yet
+export const supabaseAdmin = createClient(
+  supabaseUrl,
+  supabaseServiceKey || supabaseAnonKey,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
 
-/** Server-side Supabase client — full permissions */
-export const supabase = createClient(supabaseUrl, serverKey, {
-  auth: { persistSession: false },
-});
-
-/** Browser-safe Supabase client — anon permissions */
-export const supabaseBrowser = createClient(supabaseUrl, anonKey);
-
-// ── Type definitions matching the DB schema ──────────────────
-
-export interface DbResource {
-  id: string;
-  title: string;
-  description: string;
-  filename: string;
-  file_url: string;
-  storage_path: string;
-  uploaded_at: string;
-}
-
-export interface DbSpotifyLink {
-  id: string;
-  title: string;
-  description: string;
-  url: string;
-  embed_url: string;
-  created_at: string;
-}
-
-export interface DbTeamInfo {
-  id: number;
-  name: string;
-  title: string;
-  bio: string;
-  photo: string;
-  updated_at: string;
-}
+// Storage bucket names
+export const BUCKETS = {
+  RESOURCES: "rmi-resources",
+  PHOTOS: "rmi-photos",
+};

@@ -1,39 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { checkAuthFromRequest } from "@/lib/auth";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin, BUCKETS } from "@/lib/supabase";
 
+// GET team info
 export async function GET(req: NextRequest) {
   if (!(await checkAuthFromRequest(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("team_info")
     .select("*")
     .eq("id", 1)
     .single();
 
-  if (error) {
-    // Return defaults if not seeded yet
-    return NextResponse.json({
-      coordinator: {
-        name: "Jeremiah E. Chukwuike",
-        title: "Coordinator",
-        bio: "Kingdom builder and youth advocate.",
-        photo: "/logo/founder.jpeg",
-      },
-    });
-  }
-
-  return NextResponse.json({
-    coordinator: {
-      name: data.name,
-      title: data.title,
-      bio: data.bio,
-      photo: data.photo,
-    },
-  });
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json(data);
 }
 
+// PUT — update team/coordinator info + optional photo
 export async function PUT(req: NextRequest) {
   if (!(await checkAuthFromRequest(req))) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -41,59 +25,59 @@ export async function PUT(req: NextRequest) {
 
   try {
     const formData = await req.formData();
-    const name = (formData.get("name") as string)?.trim();
-    const title = (formData.get("title") as string)?.trim();
-    const bio = (formData.get("bio") as string)?.trim();
+    const name = formData.get("name") as string;
+    const title = formData.get("title") as string;
+    const bio = formData.get("bio") as string;
     const photoFile = formData.get("photo") as File | null;
 
-    // Get current photo
-    const { data: current } = await supabase
+    // Get current photo URL
+    const { data: current } = await supabaseAdmin
       .from("team_info")
-      .select("photo")
+      .select("photo_url")
       .eq("id", 1)
       .single();
 
-    let photoUrl = current?.photo || "/logo/founder.jpeg";
+    let photoUrl = current?.photo_url || "/logo/founder.jpeg";
 
-    // Upload new photo if provided
+    // Handle photo upload to Supabase Storage
     if (photoFile && photoFile.size > 0) {
       const ext = photoFile.name.split(".").pop() || "jpg";
       const storagePath = `coordinator-${Date.now()}.${ext}`;
-      const buffer = Buffer.from(await photoFile.arrayBuffer());
 
-      const { error: uploadErr } = await supabase.storage
-        .from("rmi-logos")
+      const buffer = await photoFile.arrayBuffer();
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from(BUCKETS.PHOTOS)
         .upload(storagePath, buffer, {
           contentType: photoFile.type || "image/jpeg",
           upsert: true,
         });
 
-      if (!uploadErr) {
-        const { data: urlData } = supabase.storage
-          .from("rmi-logos")
+      if (!uploadError) {
+        const { data: urlData } = supabaseAdmin.storage
+          .from(BUCKETS.PHOTOS)
           .getPublicUrl(storagePath);
         photoUrl = urlData.publicUrl;
       } else {
-        console.warn("Photo upload failed:", uploadErr.message);
+        console.error("Photo upload error:", uploadError);
       }
     }
 
-    // Upsert into team_info
-    const { error } = await supabase.from("team_info").upsert({
-      id: 1,
-      name: name || "Jeremiah E. Chukwuike",
-      title: title || "Coordinator",
-      bio: bio || "",
-      photo: photoUrl,
-      updated_at: new Date().toISOString(),
-    });
+    // Update DB
+    const { data, error } = await supabaseAdmin
+      .from("team_info")
+      .update({
+        name: name || current?.name,
+        title: title || current?.title,
+        bio: bio ?? current?.bio,
+        photo_url: photoUrl,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", 1)
+      .select()
+      .single();
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-    return NextResponse.json({
-      success: true,
-      team: { coordinator: { name, title, bio, photo: photoUrl } },
-    });
+    return NextResponse.json({ success: true, team: data });
   } catch (err) {
     console.error("Team update error:", err);
     return NextResponse.json({ error: "Update failed" }, { status: 500 });
