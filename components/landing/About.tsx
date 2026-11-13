@@ -29,107 +29,79 @@ const channels = [
   {
     icon: Eye,
     title: "Collaborations & Partnerships",
-    desc: "Building bridges with churches, institutions, and kingdom minded organisations.",
+    desc: "Building bridges with churches, institutions, and kingdom-minded organisations.",
   },
 ];
 
 export default function About() {
   return (
-    <section id="about" className="py-24 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <span className="inline-block text-sm font-semibold text-blue-600 bg-blue-50 border border-blue-100 px-4 py-1.5 rounded-full mb-4 uppercase tracking-widest">
-            Who We Are
-          </span>
-          <h2 className="text-4xl md:text-5xl font-heading font-black text-[#0F2557] mb-6">
-            About Renewed Minds
-            <br />
-            <span className="text-yellow-500">International</span>
+    <section id="about" className="py-16 md:py-20 bg-gray-50">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="text-center mb-12">
+          <p className="text-sm font-medium text-[#0F2557]/70 mb-2">Who we are</p>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-[#0F2557] mb-4">
+            About Renewed Minds International
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            A Kingdom organization with a God given mandate to build, inspire,
+          <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            A Kingdom organization with a God-given mandate to build, inspire,
             and positively influence young minds to know Jesus and impact their
             world for good.
           </p>
         </div>
 
-        {/* Two-column: Vision + Mission */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
-          {/* Vision */}
-          <div className="bg-[#0F2557] rounded-3xl p-8 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-40 h-40 bg-yellow-400/10 rounded-full -translate-y-1/2 translate-x-1/2" />
-            <div className="relative z-10">
-              <div className="w-12 h-12 bg-yellow-400 rounded-xl flex items-center justify-center mb-5">
-                <Eye size={24} className="text-[#0F2557]" />
-              </div>
-              <h3 className="text-2xl font-heading font-bold mb-4">
-                Our Vision
-              </h3>
-              <p className="text-blue-100 leading-relaxed text-lg italic">
-                "To Build, Inspire and Positively influence young minds to know
-                Jesus and impact their world for good."
-              </p>
+        <div className="grid md:grid-cols-2 gap-6 mb-14">
+          <div className="bg-[#0F2557] rounded-lg p-7 text-white">
+            <div className="w-10 h-10 bg-yellow-400 rounded flex items-center justify-center mb-4">
+              <Eye size={20} className="text-[#0F2557]" />
             </div>
+            <h3 className="text-xl font-heading font-semibold mb-3">Our Vision</h3>
+            <p className="text-blue-100 leading-relaxed">
+              To build, inspire and positively influence young minds to know
+              Jesus and impact their world for good.
+            </p>
           </div>
 
-          {/* Target Audience */}
-          <div
-            className="rounded-3xl p-8 text-white relative overflow-hidden"
-            style={{
-              background:
-                "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
-            }}
-          >
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2" />
-            <div className="relative z-10">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center mb-5">
-                <Users size={24} className="text-white" />
-              </div>
-              <h3 className="text-2xl font-heading font-bold mb-4">
-                Our Focus
-              </h3>
-              <p className="text-yellow-50 mb-5 leading-relaxed">
-                We speak to everyone, but we intentionally focus on:
-              </p>
-              <div className="space-y-3">
-                <div className="bg-white/20 rounded-xl px-5 py-3 font-semibold text-lg">
-                  Teenagers (13 to 19 years)
-                </div>
-                <div className="bg-white/20 rounded-xl px-5 py-3 font-semibold text-lg">
-                  Young Adults (18 to 25 years)
-                </div>
-              </div>
+          <div className="bg-yellow-500 rounded-lg p-7 text-[#0F2557]">
+            <div className="w-10 h-10 bg-white/30 rounded flex items-center justify-center mb-4">
+              <Users size={20} className="text-[#0F2557]" />
             </div>
+            <h3 className="text-xl font-heading font-semibold mb-3">Our Focus</h3>
+            <p className="mb-4 leading-relaxed">
+              We speak to everyone, but we intentionally focus on:
+            </p>
+            <ul className="space-y-2">
+              <li className="bg-white/25 rounded px-4 py-2.5 font-medium">
+                Teenagers (13 to 19 years)
+              </li>
+              <li className="bg-white/25 rounded px-4 py-2.5 font-medium">
+                Young Adults (18 to 25 years)
+              </li>
+            </ul>
           </div>
         </div>
 
-        {/* How We Fulfill the Vision */}
-        <div className="text-center mb-10">
-          <h3 className="text-2xl md:text-3xl font-heading font-bold text-[#0F2557]">
+        <div className="text-center mb-8">
+          <h3 className="text-2xl font-heading font-bold text-[#0F2557]">
             How We Fulfill the Vision
           </h3>
-          <p className="text-gray-500 mt-2">
+          <p className="text-gray-500 mt-1 text-sm">
             Six channels of intentional kingdom work
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {channels.map((item, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
+              className="bg-white rounded-lg p-5 border border-gray-100 shadow-sm"
             >
-              <div className="w-12 h-12 bg-blue-50 group-hover:bg-[#0F2557] rounded-xl flex items-center justify-center mb-4 transition-colors duration-300">
-                <item.icon
-                  size={22}
-                  className="text-[#0F2557] group-hover:text-yellow-400 transition-colors duration-300"
-                />
+              <div className="w-10 h-10 bg-[#0F2557]/5 rounded flex items-center justify-center mb-3">
+                <item.icon size={18} className="text-[#0F2557]" />
               </div>
-              <h4 className="font-heading font-semibold text-[#0F2557] mb-2 text-lg">
+              <h4 className="font-heading font-semibold text-[#0F2557] mb-1.5">
                 {item.title}
               </h4>
-              <p className="text-gray-500 text-sm leading-relaxed">{item.desc}</p>
+              <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>

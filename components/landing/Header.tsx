@@ -23,7 +23,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
+    const handleScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -36,41 +36,38 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? "bg-[#0F2557] shadow-xl backdrop-blur-sm"
-          : "bg-transparent"
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-200 ${
+        scrolled || isOpen
+          ? "bg-[#0F2557] shadow-md"
+          : "bg-[#0F2557]/95"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-10 h-10 md:w-12 md:h-12 rounded-full overflow-hidden border-2 border-yellow-400 shadow-md group-hover:scale-105 transition-transform">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="relative w-9 h-9 rounded-full overflow-hidden bg-white border border-yellow-400/80">
               <Image
                 src="/logo/logo.jpeg"
-                alt="RMI Logo"
+                alt="Renewed Minds International"
                 fill
                 className="object-cover"
+                priority
               />
             </div>
-            <div className="hidden sm:block">
-              <p className="text-white font-heading font-bold text-sm leading-tight">
+            <div className="leading-tight">
+              <p className="text-white font-heading font-semibold text-sm">
                 Renewed Minds
               </p>
-              <p className="text-yellow-400 text-xs font-medium leading-tight">
-                International
-              </p>
+              <p className="text-yellow-400 text-xs">International</p>
             </div>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-0.5">
             {navLinks.map((link) => (
               <button
                 key={link.label}
                 onClick={() => handleNavClick(link.href)}
-                className="text-white/80 hover:text-yellow-400 px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md hover:bg-white/5"
+                className="text-white/85 hover:text-yellow-400 px-2.5 py-2 text-sm transition-colors"
               >
                 {link.label}
               </button>
@@ -79,32 +76,30 @@ export default function Header() {
               href={WHATSAPP_COMMUNITY}
               target="_blank"
               rel="noopener noreferrer"
-              className="ml-2 bg-[#25D366] hover:bg-[#1ebe57] text-white text-sm font-semibold px-3 py-2 rounded-md transition-colors"
+              className="ml-3 bg-[#25D366] hover:bg-[#20bd5a] text-white text-sm font-medium px-3.5 py-1.5 rounded transition-colors"
             >
               WhatsApp Community
             </a>
           </nav>
 
-          {/* Mobile menu button */}
           <button
-            className="lg:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
+            className="lg:hidden text-white p-2"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+            {isOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Nav */}
       {isOpen && (
         <div className="lg:hidden bg-[#0A1A42] border-t border-white/10">
-          <div className="px-4 py-4 space-y-1">
+          <div className="px-4 py-3 space-y-0.5">
             {navLinks.map((link) => (
               <button
                 key={link.label}
                 onClick={() => handleNavClick(link.href)}
-                className="w-full text-left text-white/80 hover:text-yellow-400 hover:bg-white/5 px-4 py-3 rounded-md text-sm font-medium transition-colors"
+                className="w-full text-left text-white/85 hover:text-yellow-400 px-3 py-2.5 text-sm"
               >
                 {link.label}
               </button>
@@ -113,7 +108,7 @@ export default function Header() {
               href={WHATSAPP_COMMUNITY}
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full text-center bg-[#25D366] hover:bg-[#1ebe57] text-white font-semibold px-4 py-3 rounded-md text-sm mt-2 transition-colors"
+              className="block text-center bg-[#25D366] hover:bg-[#20bd5a] text-white font-medium px-3 py-2.5 rounded text-sm mt-2"
             >
               Join WhatsApp Community
             </a>
