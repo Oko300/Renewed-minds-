@@ -73,4 +73,81 @@
   border-radius: 3px;
 }
 
+/* Hero animated background — soft navy motion, not flashy */
+.hero-animated-bg {
+  background: linear-gradient(125deg, #0A1A42 0%, #0F2557 40%, #163570 70%, #0F2557 100%);
+  background-size: 200% 200%;
+  animation: heroGradientShift 18s ease-in-out infinite;
+}
+
+@keyframes heroGradientShift {
+  0%, 100% { background-position: 0% 40%; }
+  50% { background-position: 100% 60%; }
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+.hero-orb-1 {
+  width: 320px;
+  height: 320px;
+  background: #1e3a8a;
+  top: -80px;
+  right: 10%;
+  animation: heroFloat1 14s ease-in-out infinite;
+}
+
+.hero-orb-2 {
+  width: 260px;
+  height: 260px;
+  background: #b45309;
+  opacity: 0.18;
+  bottom: 5%;
+  left: 5%;
+  animation: heroFloat2 16s ease-in-out infinite;
+}
+
+.hero-orb-3 {
+  width: 180px;
+  height: 180px;
+  background: #2563eb;
+  opacity: 0.2;
+  bottom: 30%;
+  right: 25%;
+  animation: heroFloat3 12s ease-in-out infinite;
+}
+
+@keyframes heroFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-30px, 40px); }
+}
+
+@keyframes heroFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(40px, -25px); }
+}
+
+@keyframes heroFloat3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-20px, 20px) scale(1.08); }
+}
+
+.founder-card {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-animated-bg,
+  .hero-orb-1,
+  .hero-orb-2,
+  .hero-orb-3 {
+    animation: none;
+  }
+}
+
 

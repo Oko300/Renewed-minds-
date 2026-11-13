@@ -14,9 +14,14 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-[90vh] flex items-center bg-[#0F2557] pt-16"
+      className="relative min-h-[90vh] flex items-center overflow-hidden pt-16 hero-animated-bg"
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 lg:py-20 w-full">
+      {/* Soft animated orbs */}
+      <div className="hero-orb hero-orb-1" aria-hidden />
+      <div className="hero-orb hero-orb-2" aria-hidden />
+      <div className="hero-orb hero-orb-3" aria-hidden />
+
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-14 lg:py-20 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div className="text-center lg:text-left">
             <p className="text-yellow-400 text-sm font-medium mb-4">
@@ -82,31 +87,36 @@ export default function Hero() {
             </div>
           </div>
 
+          {/* Founder card — photo-led layout */}
           <div className="flex justify-center lg:justify-end">
-            <div className="bg-white rounded-lg shadow-lg p-5 max-w-[280px] w-full">
-              <div className="relative w-full aspect-square rounded-md overflow-hidden border-2 border-yellow-400 mb-4">
+            <div className="founder-card bg-white rounded-xl overflow-hidden max-w-[300px] w-full">
+              <div className="relative w-full h-[320px] sm:h-[340px] bg-[#1a1a1a]">
                 <Image
                   src="/logo/founder.jpeg"
-                  alt="Jeremiah E. Chukwuike"
+                  alt="Jeremiah E. Chukwuike, Coordinator"
                   fill
-                  className="object-cover"
+                  className="object-cover object-top"
+                  sizes="300px"
                   priority
                 />
+                {/* Soft bottom fade into content area */}
+                <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
+                <div className="absolute top-0 inset-x-0 h-1 bg-yellow-400" />
               </div>
-              <div className="text-center">
-                <h3 className="font-heading font-semibold text-[#0F2557] text-lg">
+              <div className="px-5 py-4 text-center">
+                <h3 className="font-heading font-semibold text-[#0F2557] text-lg leading-tight">
                   Jeremiah E. Chukwuike
                 </h3>
                 <p className="text-yellow-600 text-xs font-semibold uppercase tracking-wide mt-1">
                   Coordinator
                 </p>
-                <div className="w-10 h-0.5 bg-yellow-400 mx-auto my-3" />
-                <p className="text-gray-600 text-sm">
+                <div className="w-10 h-0.5 bg-yellow-400 mx-auto my-2.5" />
+                <p className="text-gray-600 text-sm leading-snug">
                   Renewed Minds International
                   <br />
                   <span className="text-gray-500">Also known as Impact Team</span>
                 </p>
-                <div className="mt-4 pt-3 border-t border-gray-100 space-y-1.5 text-sm">
+                <div className="mt-3 pt-3 border-t border-gray-100 space-y-1 text-sm">
                   <a
                     href="tel:+2348102672966"
                     className="block text-gray-600 hover:text-[#0F2557]"
