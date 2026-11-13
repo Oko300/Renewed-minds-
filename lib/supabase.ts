@@ -23,5 +23,6 @@ export const supabaseAdmin = createClient(
 // Storage bucket names
 export const BUCKETS = {
   RESOURCES: "rmi-resources",
-  PHOTOS: "rmi-photos",
+  PHOTOS: "rmi-photos", // team photos + event logos (same public images bucket)
+  LOGOS: "rmi-logos",   // alternate logos bucket if present in Supabase
 };

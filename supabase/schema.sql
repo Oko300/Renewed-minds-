@@ -34,12 +34,25 @@ CREATE TABLE IF NOT EXISTS public.team_info (
   updated_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- 4. EVENTS TABLE
+CREATE TABLE IF NOT EXISTS public.events (
+  id           TEXT PRIMARY KEY DEFAULT gen_random_uuid()::text,
+  title        TEXT NOT NULL,
+  description  TEXT DEFAULT '',
+  event_date   TEXT DEFAULT '',
+  location     TEXT DEFAULT '',
+  logo_url     TEXT DEFAULT '',
+  storage_path TEXT DEFAULT '',
+  created_at   TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- ============================================================
 -- ROW LEVEL SECURITY
 -- ============================================================
 ALTER TABLE public.resources ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.spotify_links ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.team_info ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
 
 -- Allow anyone to READ (public site reads these)
 CREATE POLICY "Public can read resources"
@@ -51,6 +64,9 @@ CREATE POLICY "Public can read spotify_links"
 CREATE POLICY "Public can read team_info"
   ON public.team_info FOR SELECT USING (true);
 
+CREATE POLICY "Public can read events"
+  ON public.events FOR SELECT USING (true);
+
 -- Allow anon key to INSERT / UPDATE / DELETE
 -- (Auth is enforced at the Next.js middleware layer via JWT)
 CREATE POLICY "Anon can write resources"
@@ -61,6 +77,9 @@ CREATE POLICY "Anon can write spotify_links"
 
 CREATE POLICY "Anon can write team_info"
   ON public.team_info FOR ALL USING (true) WITH CHECK (true);
+
+CREATE POLICY "Anon can write events"
+  ON public.events FOR ALL USING (true) WITH CHECK (true);
 
 -- ============================================================
 -- SEED — default team row

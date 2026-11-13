@@ -5,12 +5,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
+const WHATSAPP_COMMUNITY =
+  "https://chat.whatsapp.com/DbZO1iuxIbR6woNlToqUCx?s=cl&p=a&mlu=4&ilr=4&iam=2";
+
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Vision & Values", href: "#values" },
+  { label: "Events", href: "#events" },
   { label: "Resources", href: "#resources" },
-  { label: "Spotify Streams", href: "#spotify" },
+  { label: "Spotify", href: "#spotify" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -66,11 +70,19 @@ export default function Header() {
               <button
                 key={link.label}
                 onClick={() => handleNavClick(link.href)}
-                className="text-white/80 hover:text-yellow-400 px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-lg hover:bg-white/5"
+                className="text-white/80 hover:text-yellow-400 px-3 py-2 text-sm font-medium transition-colors duration-200 rounded-md hover:bg-white/5"
               >
                 {link.label}
               </button>
             ))}
+            <a
+              href={WHATSAPP_COMMUNITY}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-2 bg-[#25D366] hover:bg-[#1ebe57] text-white text-sm font-semibold px-3 py-2 rounded-md transition-colors"
+            >
+              WhatsApp Community
+            </a>
           </nav>
 
           {/* Mobile menu button */}
@@ -92,11 +104,19 @@ export default function Header() {
               <button
                 key={link.label}
                 onClick={() => handleNavClick(link.href)}
-                className="w-full text-left text-white/80 hover:text-yellow-400 hover:bg-white/5 px-4 py-3 rounded-lg text-sm font-medium transition-colors"
+                className="w-full text-left text-white/80 hover:text-yellow-400 hover:bg-white/5 px-4 py-3 rounded-md text-sm font-medium transition-colors"
               >
                 {link.label}
               </button>
             ))}
+            <a
+              href={WHATSAPP_COMMUNITY}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full text-center bg-[#25D366] hover:bg-[#1ebe57] text-white font-semibold px-4 py-3 rounded-md text-sm mt-2 transition-colors"
+            >
+              Join WhatsApp Community
+            </a>
           </div>
         </div>
       )}

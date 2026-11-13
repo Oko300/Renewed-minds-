@@ -1,10 +1,14 @@
 import Image from "next/image";
 import { Mail, Phone, MapPin, Heart } from "lucide-react";
 
+const WHATSAPP_COMMUNITY =
+  "https://chat.whatsapp.com/DbZO1iuxIbR6woNlToqUCx?s=cl&p=a&mlu=4&ilr=4&iam=2";
+
 const quickLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Vision & Values", href: "#values" },
+  { label: "Events", href: "#events" },
   { label: "Resources", href: "#resources" },
   { label: "Spotify Streams", href: "#spotify" },
   { label: "Contact", href: "#contact" },
@@ -33,12 +37,22 @@ export default function Footer() {
           Together we are Renewed Minds International, and God shall be
           glorified in us!
         </p>
-        <a
-          href="mailto:feedbackrmi39@gmail.com"
-          className="inline-block bg-[#0F2557] hover:bg-[#0A1A42] text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-        >
-          Get in Touch
-        </a>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+          <a
+            href={WHATSAPP_COMMUNITY}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-[#25D366] hover:bg-[#1ebe57] text-white font-semibold px-8 py-3.5 rounded-md transition-colors shadow-md"
+          >
+            Join WhatsApp Community
+          </a>
+          <a
+            href="mailto:feedbackrmi39@gmail.com"
+            className="inline-block bg-[#0F2557] hover:bg-[#0A1A42] text-white font-semibold px-8 py-3.5 rounded-md transition-colors shadow-md"
+          >
+            Email Us
+          </a>
+        </div>
       </div>
 
       {/* Main Footer */}
@@ -147,7 +161,7 @@ export default function Footer() {
               </a>
 
               <div className="flex items-start gap-3">
-                <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 bg-white/10 rounded-md flex items-center justify-center flex-shrink-0">
                   <MapPin size={15} className="text-blue-300" />
                 </div>
                 <div>
@@ -161,6 +175,27 @@ export default function Footer() {
                   </p>
                 </div>
               </div>
+
+              <a
+                href={WHATSAPP_COMMUNITY}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-3 group"
+              >
+                <div className="w-8 h-8 bg-[#25D366]/20 rounded-md flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/30 transition-colors">
+                  <span className="text-sm" aria-hidden>
+                    💬
+                  </span>
+                </div>
+                <div>
+                  <p className="text-xs text-blue-200/40 uppercase tracking-wider mb-0.5">
+                    Community
+                  </p>
+                  <p className="text-sm text-[#25D366] group-hover:text-[#6ee7a0] transition-colors font-medium">
+                    Join WhatsApp Community
+                  </p>
+                </div>
+              </a>
             </div>
           </div>
         </div>

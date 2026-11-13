@@ -6,7 +6,7 @@ import Image from "next/image";
 import {
   LayoutDashboard, FileText, Music, Users, LogOut,
   Upload, Trash2, Plus, Edit3, Save, X,
-  Loader2, CheckCircle, AlertCircle, Menu,
+  Loader2, CheckCircle, AlertCircle, Menu, Calendar,
 } from "lucide-react";
 
 interface Resource {
@@ -34,7 +34,17 @@ interface TeamInfo {
   photo_url: string;
 }
 
-type TabType = "overview" | "resources" | "spotify" | "team";
+interface EventItem {
+  id: string;
+  title: string;
+  description: string;
+  event_date: string;
+  location: string;
+  logo_url: string;
+  created_at?: string;
+}
+
+type TabType = "overview" | "resources" | "spotify" | "team" | "events";
 
 function Toast({ msg, type, onClose }: { msg: string; type: "success" | "error"; onClose: () => void }) {
   useEffect(() => { const t = setTimeout(onClose, 4000); return () => clearTimeout(t); }, [onClose]);
@@ -72,6 +82,18 @@ export default function AdminDashboard() {
   const teamPhotoRef = useRef<HTMLInputElement>(null);
   const [teamSaving, setTeamSaving] = useState(false);
 
+  // Events
+  const [events, setEvents] = useState<EventItem[]>([]);
+  const [eventLoading, setEventLoading] = useState(false);
+  const [eventForm, setEventForm] = useState({
+    title: "",
+    description: "",
+    event_date: "",
+    location: "",
+  });
+  const [eventLogo, setEventLogo] = useState<File | null>(null);
+  const eventLogoRef = useRef<HTMLInputElement>(null);
+
   const showToast = (msg: string, type: "success" | "error") => setToast({ msg, type });
 
   const loadResources = async () => {
@@ -96,7 +118,22 @@ export default function AdminDashboard() {
     }
   };
 
-  useEffect(() => { loadResources(); loadSpotify(); loadTeam(); }, []);
+  const loadEvents = async () => {
+    setEventLoading(true);
+    try {
+      const r = await fetch("/api/admin/events");
+      if (r.ok) setEvents(await r.json());
+    } finally {
+      setEventLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadResources();
+    loadSpotify();
+    loadTeam();
+    loadEvents();
+  }, []);
 
   const handleLogout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
@@ -185,11 +222,53 @@ export default function AdminDashboard() {
     setTeamSaving(false);
   };
 
+  // Create event
+  const handleCreateEvent = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!eventForm.title.trim()) return showToast("Title is required", "error");
+    setEventLoading(true);
+    const fd = new FormData();
+    fd.append("title", eventForm.title);
+    fd.append("description", eventForm.description);
+    fd.append("event_date", eventForm.event_date);
+    fd.append("location", eventForm.location);
+    if (eventLogo) fd.append("logo", eventLogo);
+    try {
+      const r = await fetch("/api/admin/events", { method: "POST", body: fd });
+      const data = await r.json();
+      if (r.ok) {
+        showToast("Event created!", "success");
+        setEventForm({ title: "", description: "", event_date: "", location: "" });
+        setEventLogo(null);
+        if (eventLogoRef.current) eventLogoRef.current.value = "";
+        await loadEvents();
+      } else {
+        showToast(data.error || "Failed to create event", "error");
+      }
+    } finally {
+      setEventLoading(false);
+    }
+  };
+
+  const handleDeleteEvent = async (id: string) => {
+    if (!confirm("Delete this event permanently?")) return;
+    const r = await fetch("/api/admin/events", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    if (r.ok) {
+      showToast("Event deleted", "success");
+      await loadEvents();
+    } else showToast("Delete failed", "error");
+  };
+
   const navItems: { id: TabType; label: string; icon: typeof LayoutDashboard }[] = [
-    { id: "overview",   label: "Overview",      icon: LayoutDashboard },
-    { id: "resources",  label: "Resources",     icon: FileText        },
-    { id: "spotify",    label: "Spotify Links", icon: Music           },
-    { id: "team",       label: "Team Info",     icon: Users           },
+    { id: "overview",  label: "Overview",      icon: LayoutDashboard },
+    { id: "events",    label: "Events",        icon: Calendar        },
+    { id: "resources", label: "Resources",     icon: FileText        },
+    { id: "spotify",   label: "Spotify Links", icon: Music           },
+    { id: "team",      label: "Team Info",     icon: Users           },
   ];
 
   return (
@@ -237,7 +316,15 @@ export default function AdminDashboard() {
             </button>
             <div>
               <h1 className="font-heading font-bold text-[#0F2557] text-lg">
-                {tab === "overview" ? "Dashboard Overview" : tab === "resources" ? "Resource Manager" : tab === "spotify" ? "Spotify Links" : "Team Info"}
+                {tab === "overview"
+                  ? "Dashboard Overview"
+                  : tab === "events"
+                  ? "Events"
+                  : tab === "resources"
+                  ? "Resource Manager"
+                  : tab === "spotify"
+                  ? "Spotify Links"
+                  : "Team Info"}
               </h1>
               <p className="text-xs text-gray-400">Renewed Minds International · Supabase backend</p>
             </div>
@@ -249,8 +336,9 @@ export default function AdminDashboard() {
           {/* ── OVERVIEW ── */}
           {tab === "overview" && (
             <div className="space-y-6">
-              <div className="grid sm:grid-cols-3 gap-5">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
                 {[
+                  { label: "Events",         value: events.length,       icon: Calendar, color: "text-amber-600 bg-amber-50"  },
                   { label: "PDF Resources",  value: resources.length,    icon: FileText, color: "text-blue-600 bg-blue-50"   },
                   { label: "Spotify Links",  value: spotifyItems.length, icon: Music,    color: "text-green-600 bg-green-50" },
                   { label: "Team Members",   value: 1,                   icon: Users,    color: "text-purple-600 bg-purple-50" },
@@ -276,6 +364,134 @@ export default function AdminDashboard() {
                     </button>
                   ))}
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── EVENTS ── */}
+          {tab === "events" && (
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 className="font-heading font-bold text-[#0F2557] text-lg mb-5 flex items-center gap-2">
+                  <Plus size={20} className="text-amber-500" /> Create New Event
+                </h2>
+                <form onSubmit={handleCreateEvent} className="space-y-4">
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Title *</label>
+                      <input
+                        type="text"
+                        value={eventForm.title}
+                        onChange={(e) => setEventForm((p) => ({ ...p, title: e.target.value }))}
+                        placeholder="Event title"
+                        required
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-1.5">Date</label>
+                      <input
+                        type="text"
+                        value={eventForm.event_date}
+                        onChange={(e) => setEventForm((p) => ({ ...p, event_date: e.target.value }))}
+                        placeholder="e.g. 15 March 2026 or 2026-03-15"
+                        className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Location</label>
+                    <input
+                      type="text"
+                      value={eventForm.location}
+                      onChange={(e) => setEventForm((p) => ({ ...p, location: e.target.value }))}
+                      placeholder="Venue or city"
+                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description</label>
+                    <textarea
+                      value={eventForm.description}
+                      onChange={(e) => setEventForm((p) => ({ ...p, description: e.target.value }))}
+                      placeholder="What the event is about"
+                      rows={3}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                      Logo / Image <span className="text-gray-400 font-normal">(optional)</span>
+                    </label>
+                    <input
+                      ref={eventLogoRef}
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp,image/jpg"
+                      onChange={(e) => setEventLogo(e.target.files?.[0] || null)}
+                      className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-amber-600 file:text-white file:text-xs file:font-medium"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={eventLoading}
+                    className="bg-[#0F2557] hover:bg-[#0A1A42] disabled:opacity-60 text-white font-semibold px-6 py-3 rounded-xl text-sm flex items-center gap-2 shadow-md transition-all"
+                  >
+                    {eventLoading ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
+                    Create Event
+                  </button>
+                </form>
+              </div>
+
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h2 className="font-heading font-bold text-[#0F2557] text-lg mb-5">
+                  Existing Events ({events.length})
+                </h2>
+                {eventLoading && events.length === 0 ? (
+                  <div className="flex justify-center py-10">
+                    <Loader2 size={28} className="animate-spin text-[#0F2557]" />
+                  </div>
+                ) : events.length === 0 ? (
+                  <div className="text-center py-10 text-gray-400">
+                    <Calendar size={40} className="mx-auto mb-3 opacity-30" />
+                    <p>No events yet. Create one above.</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {events.map((ev) => (
+                      <div
+                        key={ev.id}
+                        className="flex items-start gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100"
+                      >
+                        {ev.logo_url ? (
+                          <div className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200">
+                            <Image src={ev.logo_url} alt="" fill className="object-cover" />
+                          </div>
+                        ) : (
+                          <div className="w-14 h-14 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+                            <Calendar size={20} className="text-amber-600" />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-[#0F2557] text-sm">{ev.title}</p>
+                          {(ev.event_date || ev.location) && (
+                            <p className="text-xs text-gray-500 mt-0.5">
+                              {[ev.event_date, ev.location].filter(Boolean).join(" · ")}
+                            </p>
+                          )}
+                          {ev.description && (
+                            <p className="text-xs text-gray-400 mt-1 line-clamp-2">{ev.description}</p>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => handleDeleteEvent(ev.id)}
+                          className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors flex-shrink-0"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}

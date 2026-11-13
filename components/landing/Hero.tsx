@@ -17,20 +17,9 @@ export default function Hero() {
           "linear-gradient(135deg, #0A1A42 0%, #0F2557 55%, #162B6E 100%)",
       }}
     >
-      {/* Decorative Circles */}
-      <div className="absolute top-20 right-20 w-96 h-96 rounded-full bg-blue-600/10 blur-3xl pointer-events-none" />
-      <div className="absolute bottom-20 left-10 w-72 h-72 rounded-full bg-yellow-400/10 blur-3xl pointer-events-none" />
-      <div className="absolute top-1/2 left-1/3 w-56 h-56 rounded-full bg-white/5 blur-2xl pointer-events-none" />
-
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-5 pointer-events-none"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-          backgroundSize: "50px 50px",
-        }}
-      />
+      {/* Soft ambient accents — kept subtle for a calmer look */}
+      <div className="absolute top-24 right-16 w-64 h-64 rounded-full bg-blue-600/8 blur-2xl pointer-events-none" />
+      <div className="absolute bottom-24 left-12 w-48 h-48 rounded-full bg-yellow-400/8 blur-2xl pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -83,21 +72,29 @@ export default function Hero() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-2 flex-wrap">
+              <a
+                href="https://chat.whatsapp.com/DbZO1iuxIbR6woNlToqUCx?s=cl&p=a&mlu=4&ilr=4&iam=2"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe57] text-white font-semibold px-6 py-3.5 rounded-md transition-colors shadow-md"
+              >
+                Join WhatsApp Community
+              </a>
               <button
                 onClick={() => scrollTo("#resources")}
-                className="flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[#0F2557] font-bold px-7 py-4 rounded-xl transition-all duration-200 shadow-lg hover:shadow-yellow-400/25 hover:-translate-y-0.5 group"
+                className="flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-[#0F2557] font-semibold px-6 py-3.5 rounded-md transition-colors shadow-md group"
               >
                 <BookOpen size={18} />
                 Explore Resources
                 <ArrowRight
                   size={16}
-                  className="group-hover:translate-x-1 transition-transform"
+                  className="group-hover:translate-x-0.5 transition-transform"
                 />
               </button>
               <button
                 onClick={() => scrollTo("#about")}
-                className="flex items-center justify-center gap-2 border-2 border-white/40 text-white hover:border-yellow-400 hover:text-yellow-400 font-semibold px-7 py-4 rounded-xl transition-all duration-200"
+                className="flex items-center justify-center gap-2 border border-white/50 text-white hover:border-yellow-400 hover:text-yellow-400 font-medium px-6 py-3.5 rounded-md transition-colors"
               >
                 <Users size={18} />
                 Who We Are

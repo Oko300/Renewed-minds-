@@ -34,6 +34,18 @@ CREATE TABLE IF NOT EXISTS public.team_info (
   updated_at  TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- 4. EVENTS TABLE (admin-created events with optional logo)
+CREATE TABLE IF NOT EXISTS public.events (
+  id           TEXT PRIMARY KEY,
+  title        TEXT NOT NULL,
+  description  TEXT DEFAULT '',
+  event_date   TEXT DEFAULT '',
+  location     TEXT DEFAULT '',
+  logo_url     TEXT DEFAULT '',
+  storage_path TEXT DEFAULT '',
+  created_at   TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Insert default coordinator record
 INSERT INTO public.team_info (id, name, title, bio, photo)
 VALUES (
@@ -52,6 +64,7 @@ ON CONFLICT (id) DO NOTHING;
 ALTER TABLE public.resources    DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.spotify_links DISABLE ROW LEVEL SECURITY;
 ALTER TABLE public.team_info    DISABLE ROW LEVEL SECURITY;
+ALTER TABLE public.events       DISABLE ROW LEVEL SECURITY;
 
 -- ============================================================
 -- STORAGE BUCKETS
